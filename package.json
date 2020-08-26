@@ -1,0 +1,11 @@
+{
+  "name": "skate-shop-mongodb",
+  "version": "1.0.0",
+  "description": "api for a skateshop app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tom Mooney <tcmooney88@gmail.com> (https://github.com/TCMooney)",
+  "license": "ISC"
+}
