@@ -1,14 +1,30 @@
 const express = require('express');
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const passport = require('passport');
+const session = require('express-session');
+
+dotenv.config({ path: './config/config.env' })
+
+require('./config/passport')(passport)
+
+const products = require('./routes/products');
+const auth = require('./routes/auth');
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}))
 
-const db = require('./config/keys').mongoURI;
+app.use(passport.initialize())
+app.use(passport.session())
 
-mongoose.connect(db,
+const MONGO_URI = process.env.MONGO_URI;
+
+mongoose.connect(MONGO_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -16,6 +32,9 @@ mongoose.connect(db,
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
-const port = process.env.PORT || 4000;
+app.use('/products', products);
+app.use('/auth', auth);
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
