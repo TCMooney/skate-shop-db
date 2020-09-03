@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const passport = require('passport');
 const session = require('express-session');
 
@@ -12,6 +13,10 @@ const products = require('./routes/products');
 const auth = require('./routes/auth');
 
 const app = express();
+
+app.use(cors());
+
+app.use(express.json());
 
 app.use(session({
   secret: 'keyboard cat',

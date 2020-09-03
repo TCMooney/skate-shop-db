@@ -10,17 +10,20 @@ router.get('/', (req, res) => {
     .catch(err => res.status(404).json(err));
 })
 
-router.post('/newProduct', (req, res) => {
+router.post('/new', (req, res) => {
+  const { name, quantity, description, imageURL } = req.body;
   const newProduct = new Product({
-    name: req.body.name,
-    quantity: req.body.quantity,
-    description: req.body.description,
-    imageURL: req.body.imageURL
+    name,
+    quantity,
+    description,
+    imageURL
   });
-
-  newProduct.save()
-    .then(product => res.json(product))
-    .catch(err => res.status(404).json(err));
+  newProduct.save().then(product => res.json({
+    name: product.name,
+    quantity: product.quantity,
+    description: product.description,
+    imageURL: product.imageURL
+  }))
 })
 
 router.delete('/deleteProduct/:id', (req, res) => {
