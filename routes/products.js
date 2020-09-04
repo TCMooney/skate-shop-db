@@ -45,9 +45,9 @@ router.put('/edit/:id', (req, res) => {
       product.save((err) => {
         if (err) {
           console.log(err)
-          return res.json({ msg: 'An error has occured ' })
+          return res.json({ msg: 'An error has occured editing the product' })
         } else {
-          return res.json({ msg: 'Edit Successful' })
+          return res.json({ msg: ' Product Edit Successful' })
         }
       })
     }
