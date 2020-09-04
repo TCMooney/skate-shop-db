@@ -6,6 +6,10 @@ const ProductSchema = new Schema({
     type: String,
     required: true
   },
+  brand: {
+    type: String,
+    required: true
+  },
   quantity: {
     type: Number,
     required: true
@@ -17,6 +21,10 @@ const ProductSchema = new Schema({
   imageURL: {
     type: String,
     required: false
+  },
+  category: {
+    type: String,
+    required: true
   },
   date: {
     type: Date,

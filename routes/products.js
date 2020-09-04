@@ -11,19 +11,47 @@ router.get('/', (req, res) => {
 })
 
 router.post('/new', (req, res) => {
-  const { name, quantity, description, imageURL } = req.body;
+  const { name, quantity, description, imageURL, brand, category } = req.body;
   const newProduct = new Product({
     name,
     quantity,
     description,
-    imageURL
+    imageURL,
+    brand,
+    category
   });
   newProduct.save().then(product => res.json({
     name: product.name,
     quantity: product.quantity,
     description: product.description,
-    imageURL: product.imageURL
+    imageURL: product.imageURL,
+    brand: product.brand,
+    category: product.category
   }))
+})
+
+router.put('/edit/:id', (req, res) => {
+  Product.findById(req.params.id, (err, product) => {
+    if (!product) {
+      return res.status(404).json({ msg: 'Product not found' });
+    } else {
+      product.name = req.body.name;
+      product.quantity = req.body.quantity;
+      product.description = req.body.description;
+      product.imageURL = req.body.imageURL;
+      product.brand = req.body.brand;
+      product.category = req.body.category;
+
+      product.save((err) => {
+        if (err) {
+          console.log(err)
+          return res.json({ msg: 'An error has occured ' })
+        } else {
+          return res.json({ msg: 'Edit Successful' })
+        }
+      })
+    }
+  })
 })
 
 router.delete('/deleteProduct/:id', (req, res) => {
