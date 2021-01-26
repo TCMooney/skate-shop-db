@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const Links = require('../models/Links');
-const e = require('express');
 
 router.get('/', (req, res) => {
   Links.find()

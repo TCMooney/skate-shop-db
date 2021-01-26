@@ -1,13 +1,40 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
 
 const Product = require('../models/Product');
+
+const storage = new GridFsStorage({
+  url: process.env.MONGO_URI,
+  options: { useNewUrlParser: true, useUnifiedTopology: true },
+  file: (req, file) => {
+    const match = ['image./png', 'image/jpg'];
+
+    if (match.indexOf(file.mimetype) === 1) {
+      const filename = `${Date.now()}-${file.originalname}`;
+      return filename;
+    }
+
+    return {
+      bucketName: 'products',
+      filename: `${Date.now()}-${file.originalname}`
+    }
+  }
+})
+
+const uploadFile = multer({ storage });
 
 router.get('/', (req, res) => {
   Product.find()
     .sort({ date: -1 })
     .then(products => res.json(products))
     .catch(err => res.status(404).json(err));
+})
+
+router.post('/image-test', uploadFile.single('image'), (req, res) => {
+  res.sendFile(`${__dirname}/${req.file.filename}`);
+  console.log(req.file)
 })
 
 router.post('/new', (req, res) => {
