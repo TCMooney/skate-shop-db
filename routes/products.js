@@ -1,29 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
+const { cloudinary } = require('../cloudinary')
 
 const Product = require('../models/Product');
-
-const storage = new GridFsStorage({
-  url: process.env.MONGO_URI,
-  options: { useNewUrlParser: true, useUnifiedTopology: true },
-  file: (req, file) => {
-    const match = ['image./png', 'image/jpg'];
-
-    if (match.indexOf(file.mimetype) === 1) {
-      const filename = `${Date.now()}-${file.originalname}`;
-      return filename;
-    }
-
-    return {
-      bucketName: 'products',
-      filename: `${Date.now()}-${file.originalname}`
-    }
-  }
-})
-
-const uploadFile = multer({ storage });
 
 router.get('/', (req, res) => {
   Product.find()
@@ -32,29 +11,33 @@ router.get('/', (req, res) => {
     .catch(err => res.status(404).json(err));
 })
 
-router.post('/image-test', uploadFile.single('image'), (req, res) => {
-  res.sendFile(`${__dirname}/${req.file.filename}`);
-  console.log(req.file)
-})
-
-router.post('/new', (req, res) => {
-  const { name, quantity, description, imageURL, brand, category } = req.body;
-  const newProduct = new Product({
-    name,
-    quantity,
-    description,
-    imageURL,
-    brand,
-    category
-  });
-  newProduct.save().then(product => res.json({
-    name: product.name,
-    quantity: product.quantity,
-    description: product.description,
-    imageURL: product.imageURL,
-    brand: product.brand,
-    category: product.category
-  }))
+router.post('/new', async (req, res) => {
+  try {
+    const { itemName, quantity, description, imageData, brand, category, price } = req.body;
+    const uploadResponse = await cloudinary.uploader.upload(imageData, { upload_preset: 'skate_shop_products' })
+    const imageUrl = uploadResponse.url;
+    const newProduct = new Product({
+      name: itemName,
+      quantity,
+      description,
+      imageUrl,
+      brand,
+      category,
+      price
+    });
+    newProduct.save().then(product => res.json({
+      name: product.name,
+      quantity: product.quantity,
+      description: product.description,
+      imageUrl: product.imageURL,
+      brand: product.brand,
+      category: product.category,
+      price: product.price
+    }))
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: 'Upload Failed' })
+  }
 })
 
 router.put('/edit/:id', (req, res) => {

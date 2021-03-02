@@ -11,7 +11,6 @@ require('./config/passport')(passport)
 
 const products = require('./routes/products');
 const auth = require('./routes/auth');
-const links = require('./routes/links');
 
 const app = express();
 
@@ -40,7 +39,6 @@ mongoose.connect(MONGO_URI,
 
 app.use('/products', products);
 app.use('/auth', auth);
-app.use('/links', links);
 
 const PORT = process.env.PORT || 5000;
 
