@@ -15,23 +15,31 @@ module.exports = function validateRegisterInput(data) {
   data.address.zipCode = !isEmpty(data.address.zipCode) ? data.address.zipCode : "";
 
   if (Validator.isEmpty(data.firstName)) {
-    errors.firstName = 'Name field is required';
+    errors.firstName = 'First Name field is required';
   }
 
   if (Validator.isEmpty(data.lastName)) {
-    errors.lastName = 'Name field is required';
+    errors.lastName = 'Last Name field is required';
   }
 
   if (Validator.isEmpty(data.email)) {
-    errors.email = 'Name field is required';
+    errors.email = 'Email field is required';
   }
 
   if (Validator.isEmpty(data.password)) {
-    errors.password = 'Name field is required';
+    errors.password = 'Password field is required';
   }
 
   if (Validator.isEmpty(data.password2)) {
-    errors.password2 = 'Name field is required';
+    errors.password2 = 'Confirm password field is required';
+  }
+
+  if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
+    errors.password = 'Password must be at least 6 characters';
+  }
+
+  if (!Validator.equals(data.password, data.password2)) {
+    errors.password = 'Password must match';
   }
 
   if (Validator.isEmpty(data.address.street)) {
