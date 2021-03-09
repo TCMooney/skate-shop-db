@@ -8,13 +8,14 @@ const validateRegisterInput = require('../validation/registerValidation');
 const User = require('../models/User');
 
 router.post('/', (req, res) => {
+  console.log(req.body)
   console.log(res.session)
   const { errors, isValid} = validateRegisterInput(req.body);
   if(!isValid) {
     return res.status(400).json(errors);
   }
 
-  const { firstName, lastName, email, password, address } = req.body;
+  const { firstName, lastName, email, password, street, city, state, zipCode } = req.body;
 
   User.findOne({ email })
     .then(user => {
@@ -24,12 +25,10 @@ router.post('/', (req, res) => {
         firstName,
         lastName,
         email,
-        address: {
-          street: address.street,
-          city: address.city,
-          state: address.state,
-          zipCode: address.zipCode
-        },
+        street,
+        city,
+        state,
+        zipCode,
         password
       });
 
@@ -53,10 +52,10 @@ router.post('/', (req, res) => {
                       name: user.name,
                       email: user.email,
                       address: {
-                        street: user.address.street,
-                        city: user.address.city,
-                        state: user.address.state,
-                        zipCode: user.address.zipCode
+                        street: user.street,
+                        city: user.city,
+                        state: user.state,
+                        zipCode: user.zipCode
                       }
                     },
                     sessionData

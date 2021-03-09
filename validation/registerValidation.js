@@ -9,10 +9,10 @@ module.exports = function validateRegisterInput(data) {
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password2 = !isEmpty(data.password2) ? data.password2 : "";
-  data.address.street = !isEmpty(data.address.street) ? data.address.street : "";
-  data.address.city = !isEmpty(data.address.city) ? data.address.city : "";
-  data.address.state = !isEmpty(data.address.state) ? data.address.state : "";
-  data.address.zipCode = !isEmpty(data.address.zipCode) ? data.address.zipCode : "";
+  data.street = !isEmpty(data.street) ? data.street : "";
+  data.city = !isEmpty(data.city) ? data.city : "";
+  data.state = !isEmpty(data.state) ? data.state : "";
+  data.zipCode = !isEmpty(data.zipCode) ? data.zipCode : "";
 
   if (Validator.isEmpty(data.firstName)) {
     errors.firstName = 'First Name field is required';
@@ -42,20 +42,20 @@ module.exports = function validateRegisterInput(data) {
     errors.password = 'Password must match';
   }
 
-  if (Validator.isEmpty(data.address.street)) {
-    errors.address.street = 'Name field is required';
+  if (Validator.isEmpty(data.street)) {
+    errors.street = 'Name field is required';
   }
 
-  if (Validator.isEmpty(data.address.city)) {
-    errors.address.city = 'Name field is required';
+  if (Validator.isEmpty(data.city)) {
+    errors.city = 'Name field is required';
   }
 
-  if (Validator.isEmpty(data.address.state)) {
-    errors.address.state = 'Name field is required';
+  if (Validator.isEmpty(data.state)) {
+    errors.state = 'Name field is required';
   }
 
-  if (Validator.isEmpty(data.address.zipCode)) {
-    errors.address.zipCode = 'Name field is required';
+  if (Validator.isEmpty(data.zipCode)) {
+    errors.zipCode = 'Name field is required';
   }
 
   return {
