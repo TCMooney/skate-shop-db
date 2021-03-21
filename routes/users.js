@@ -8,10 +8,8 @@ const validateRegisterInput = require('../validation/registerValidation');
 const User = require('../models/User');
 
 router.post('/', (req, res) => {
-  console.log(req.body)
-  console.log(res.session)
-  const { errors, isValid} = validateRegisterInput(req.body);
-  if(!isValid) {
+  const { errors, isValid } = validateRegisterInput(req.body);
+  if (!isValid) {
     return res.status(400).json(errors);
   }
 
@@ -19,9 +17,9 @@ router.post('/', (req, res) => {
 
   User.findOne({ email })
     .then(user => {
-      if (user) return res.status(400).json({ msg: 'User already exists'});
+      if (user) return res.status(400).json({ msg: 'User already exists' });
 
-      const newUser = new User ({
+      const newUser = new User({
         firstName,
         lastName,
         email,
@@ -39,10 +37,10 @@ router.post('/', (req, res) => {
           newUser.save()
             .then(user => {
               jwt.sign(
-                {id: user.id },
+                { id: user.id },
                 process.env.JWT_SECRET,
-                { expiresIn: 604800},
-                (err,token) => {
+                { expiresIn: 604800 },
+                (err, token) => {
                   if (err) throw err;
                   sessionData = req.session;
                   sessionData.access_token = token;
@@ -51,12 +49,10 @@ router.post('/', (req, res) => {
                       id: user.id,
                       name: user.name,
                       email: user.email,
-                      address: {
-                        street: user.street,
-                        city: user.city,
-                        state: user.state,
-                        zipCode: user.zipCode
-                      }
+                      street: user.street,
+                      city: user.city,
+                      state: user.state,
+                      zipCode: user.zipCode
                     },
                     sessionData
                   })

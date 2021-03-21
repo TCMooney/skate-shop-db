@@ -11,6 +11,17 @@ router.get('/', (req, res) => {
     .catch(err => res.status(404).json(err));
 })
 
+router.get('/productDetail/:id', (req, res) => {
+  Product.findById(req.params.id)
+    .then((product) => {
+      res.json(product)
+    })
+    .catch((err) => {
+      res.status(404).json(err)
+      console.log(err)
+    })
+})
+
 router.post('/new', async (req, res) => {
   try {
     const { itemName, quantity, description, imageData, brand, category, price } = req.body;

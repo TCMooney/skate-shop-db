@@ -15,7 +15,10 @@ const user = require('./routes/users');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONT_END_URL,
+  credentials: true
+}));
 
 app.use(express.json());
 
@@ -27,9 +30,9 @@ app.use(session({
   unset: 'destroy',
   saveUninitialized: true,
   cookie: {
-    sameSite: 'none',
-    secure: true,
-    httpOnly: true,
+    // sameSite: 'none',
+    // secure: true,
+    // httpOnly: true,
     maxAge: 60000 * 60 * 24
   }
 }))
